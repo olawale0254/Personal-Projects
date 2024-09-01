@@ -1,63 +1,62 @@
+# Imbalanced Data Experiment - Modelling
 
-# Imbalance Data Experiment
+## Overview
+This project explores the challenge of handling imbalanced datasets in a classification task. The primary focus is on applying different resampling techniques and evaluating various models to improve the performance of predicting the presence of a particular species.
 
-This project focuses on handling imbalanced datasets using various resampling techniques and machine learning models. The goal is to improve the detection of minority class instances while maintaining a balance between precision and recall.
+## Dataset
+The dataset used in this project contains the following features:
+- **species**: The species under observation.
+- **elevation**: The elevation at which the species is found.
+- **landcovertype**: The type of land cover where the species is found.
+- **vegetationindex**: A numerical index representing vegetation.
+- **presence**: The target variable indicating the presence (1) or absence (0) of the species.
 
-## Table of Contents
-1. [Data Import and Initial Exploration](#data-import-and-initial-exploration)
-2. [Data Cleaning and Preprocessing](#data-cleaning-and-preprocessing)
-3. [Feature Engineering](#feature-engineering)
-4. [Model Training and Evaluation](#model-training-and-evaluation)
-5. [Model Evaluation](#model-evaluation)
-6. [Results and Recommendations](#results-and-recommendations)
-7. [Key Takeaways](#key-takeaways)
-8. [Final Comments](#final-comments)
+## Preprocessing Steps
+### Missing Values Handling
+- Missing values were found in the `elevation`, `landcovertype`, and `vegetationindex` columns.
+- Missing values were filled using the median for numerical columns and mode for categorical columns.
 
-## Data Import and Initial Exploration
-- **Libraries Imported**: Various libraries such as `pandas`, `numpy`, `matplotlib`, `seaborn`, and several `sklearn` modules were imported.
-- **Data Loading**: The dataset was loaded from a CSV file named `data.csv`.
-- **Initial Data Exploration**: The first few rows of the dataset were displayed to understand its structure.
+### Outlier Detection and Removal
+- Outliers were identified in `elevation` and `vegetationindex` using the Interquartile Range (IQR) method.
+- Outliers were removed to ensure better model performance.
 
-## Data Cleaning and Preprocessing
-- **Missing Values Check**: The dataset was checked for missing values.
-- **Handling Missing Values**: Missing values in the `elevation` and `vegetationindex` columns were filled with their respective medians, while missing values in the `landcovertype` column were filled with the mode.
+### Feature Engineering
+- Interaction features were created, such as `elevation_vegetationindex`.
+- Features were standardized using `StandardScaler`.
 
-## Feature Engineering
-- **Label Encoding**: Categorical variables were encoded using `LabelEncoder`.
-- **Feature Scaling**: Features were scaled using `StandardScaler`.
+### Label Encoding
+- Categorical features like `landcovertype` were label encoded.
+
+### Correlation Analysis
+- A heatmap was generated to identify the correlation between features and the target variable.
 
 ## Model Training and Evaluation
-- **Train-Test Split**: The dataset was split into training and testing sets.
-- **Model Selection**: Various models such as `RandomForestClassifier`, `GradientBoostingClassifier`, `AdaBoostClassifier`, and `SVC` were selected for training.
-- **Resampling Techniques**: Different resampling techniques like `SMOTE`, `ADASYN`, `BorderlineSMOTE`, and `SVMSMOTE` were applied to handle class imbalance.
-- **Pipeline Creation**: Pipelines were created to streamline the process of resampling, scaling, and model training.
-- **Grid Search**: Hyperparameter tuning was performed using `GridSearchCV`.
+### Without Resampling
+Three tree-based models were selected due to their ability to handle imbalanced datasets:
+- **Random Forest**
+- **Gradient Boosting**
+- **AdaBoost**
 
-## Model Evaluation
-- **Evaluation Metrics**: Models were evaluated using metrics such as `accuracy_score`, `roc_auc_score`, `confusion_matrix`, `precision_score`, `recall_score`, and `f1_score`.
-- **Threshold Tuning**: The decision threshold was tuned to balance precision and recall, with strategies to maximize F1 Score and Recall.
-- **Best Models**: The best models and their respective thresholds were identified and stored.
+Hyperparameters were optimized using `GridSearchCV`. The performance of these models was evaluated using metrics like Precision, F1 Score, ROC AUC, Sensitivity, and Specificity.
 
-## Results and Recommendations
-- **Model Performance**: The performance of models with and without resampling, and with tweaked thresholds, was compared.
-- **Recommended Model**: Gradient Boosting with ADASYN (Maximize Recall) was recommended as the best model for detecting the minority class instances.
-- **Future Work**: Suggestions for further improvements included feature engineering, additional data collection, advanced hyperparameter tuning, hybrid resampling methods, and experimenting with more ensemble and tree-based models.
+### With Resampling
+Given the class imbalance, the following resampling techniques were applied:
+- **SMOTE**
+- **ADASYN**
+- **BorderlineSMOTE**
+- **SVMSMOTE**
 
-## Key Takeaways
-- **Without Resampling**: High precision and specificity but low recall.
-- **With Resampling**: Improved recall but at the cost of precision.
-- **With Resampling and Tweaked Thresholds**: Best balance of high recall and precision, maintaining a strong F1 score and ROC AUC.
+These methods were used in conjunction with the tree-based models to improve sensitivity, especially for the minority class.
 
-## Final Comments
-- **Feature Engineering**: Create new features and analyze the importance of existing features.
-- **Additional Data**: Collect more data to improve the model.
-- **Hyperparameter Tuning**: Focus on Bayesian optimization.
-- **Hybrid Resampling Methods**: Combine over-sampling and under-sampling techniques.
-- **Experiment with More Models**: Try more ensemble and tree-based models.
+## Results
+- **Without Resampling**: Random Forest performed best but showed lower sensitivity.
+- **With Resampling**: Gradient Boosting with SVMSMOTE provided the best balance between sensitivity and overall performance, making it the preferred model.
 
+## Optimization
+To further improve the model, decision thresholds were adjusted to maximize either the F1 Score or Recall, depending on the application requirements.
+
+## Conclusion
+This project demonstrates the importance of handling imbalanced datasets, particularly in ecological studies where missing critical predictions could have significant consequences. The best model was selected based on its ability to generalize well to the minority class, ensuring that important ecological insights are not missed.
 
 #### Proposed Deployment Architecture
 ![Architecture Diagram](proposedArchitecture.png)
-
-
-
